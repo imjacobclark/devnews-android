@@ -124,9 +124,13 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
+        if (id == R.id.devnews_website) {
+            Uri uriUrl = Uri.parse("http://devnews.today" +
+                    "");
+            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+            startActivity(launchBrowser);
             return true;
-        }*/
+        }
 
         return super.onOptionsItemSelected(item);
     }
