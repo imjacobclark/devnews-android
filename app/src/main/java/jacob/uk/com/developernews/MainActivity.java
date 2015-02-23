@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -21,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -29,21 +33,41 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        JSONArray apiData;
+
         RequestQueue queue = Volley.newRequestQueue(this);
         final String url = "http://api.devnews.today";
+
+        ListView listView = (ListView) findViewById(R.id.list);
+        final ArrayList<String> listItems = new ArrayList<String>();
+        final ArrayAdapter<String> adapter;
+
+        adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                listItems);
+
+        listView.setAdapter(adapter);
 
         JsonArrayRequest getRequest = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>()
                 {
                     @Override
                     public void onResponse(JSONArray response) {
-                        VolleyLog.d(response.toString());
 
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject article = response.getJSONObject(i);
                                 String title = article.getString("title");
+                                String url = article.getString("url");
+                                Integer score = article.getInt("score");
+
                                 VolleyLog.d(title);
+                                VolleyLog.d(url);
+                                VolleyLog.d(String.valueOf(score));
+
+                                listItems.add(title + " | Score: " + score);
+
+                                adapter.notifyDataSetChanged();
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
