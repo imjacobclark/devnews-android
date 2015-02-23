@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -84,7 +85,7 @@ public class MainActivity extends ActionBarActivity {
                                 String url = article.getString("url");
                                 Integer score = article.getInt("score");
 
-                                listItems.add(title);
+                                listItems.add(i+1 + ". " + title);
 
                                 adapter.notifyDataSetChanged();
 
@@ -100,7 +101,7 @@ public class MainActivity extends ActionBarActivity {
                 {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("Error.Response", error.getMessage());
+                        Toast.makeText(getApplicationContext(), "Sorry, I wasn't able to get the news feed.", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
