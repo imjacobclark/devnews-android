@@ -84,11 +84,7 @@ public class MainActivity extends ActionBarActivity {
                                 String url = article.getString("url");
                                 Integer score = article.getInt("score");
 
-                                VolleyLog.d(title);
-                                VolleyLog.d(url);
-                                VolleyLog.d(String.valueOf(score));
-
-                                listItems.add(title + " | Score: " + score);
+                                listItems.add(title);
 
                                 adapter.notifyDataSetChanged();
 
@@ -128,9 +124,9 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
