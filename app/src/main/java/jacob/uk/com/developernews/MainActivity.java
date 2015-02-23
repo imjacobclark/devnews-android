@@ -1,10 +1,15 @@
 package jacob.uk.com.developernews;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,17 +33,17 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity {
 
+    private JSONArray APIData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        JSONArray apiData;
-
         RequestQueue queue = Volley.newRequestQueue(this);
         final String url = "http://api.devnews.today";
 
-        ListView listView = (ListView) findViewById(R.id.list);
+        final ListView listView = (ListView) findViewById(R.id.list);
         final ArrayList<String> listItems = new ArrayList<String>();
         final ArrayAdapter<String> adapter;
 
@@ -48,11 +53,29 @@ public class MainActivity extends ActionBarActivity {
 
         listView.setAdapter(adapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> parent, View selectedView,
+                                    int position, long id) {
+
+                try {
+                    Uri uriUrl = Uri.parse(APIData.getJSONObject(position).getString("url"));
+                    Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+                    startActivity(launchBrowser);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
         JsonArrayRequest getRequest = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>()
                 {
                     @Override
                     public void onResponse(JSONArray response) {
+
+                        MainActivity.this.APIData = response;
 
                         for (int i = 0; i < response.length(); i++) {
                             try {
